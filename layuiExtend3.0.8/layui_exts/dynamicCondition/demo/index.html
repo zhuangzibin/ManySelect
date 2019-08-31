@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>动态条件插件demo</title>
+		<link href="../../../layui/css/layui.css" media="all" rel="stylesheet">
+		<script src="../../../layui/layui.js"></script>
+	</head>
+	<body>
+		<div id="simple-query" style="margin-left:50px;margin-top:20px;">
+			<h1>简单查询</h1>
+			<div id="msg">查询条件：</div>
+			<br/>
+			<div>请求参数json：</div>
+			<div id="result1" style="word-break:break-all;height:60px;width:500px;padding-left:50px;"></div>
+		</div>
+		<div id="complex-query" style="margin-left:50px;margin-top:20px;">
+			<h1>复杂查询</h1>
+			<div id="msg2">查询条件：</div>
+			<br/>
+			<div>请求参数json：</div>
+			<div id="result2" style="word-break:break-all;height:60px;width:500px;padding-left:50px;"></div>
+
+		</div>
+		<!--<ul id="dcDemo" class="list" style="display:none;">
+			<li field="id" title="id" edit="text" layVerify="number"></li>
+			<li class="name" field="name" title="姓名" edit="text"></li>
+			<li field="sex" title="性别" edit="select" templet="#selectSex"></li>
+			<li field="birthday" title="出生日期" edit="date"></li>
+			<li field="phone" title="手机号码" edit="text" layVerify="phone"></li>
+			<li field="email" title="邮箱" edit="text" layVerify="email"></li>
+		</ul>-->
+		<ul id="dcDemo" style="display:none;">
+		    <li field="bmfname" title="生产车间" edit="text"></li>
+		    <li field="fmonumber" title="生产订单编号"  edit="text"></li>
+		    <li field="fdocumentstatus" title="单据状态" edit="select" templet="#selectStatus"></li>
+		    <li field="wlbfnumber" title="产品编码" edit="text"></li>
+		    <li field="wlbfname" title="产品名称" edit="text"></li>
+		    <li field="fspecification" title="规格型号" edit="text" ></li>
+		    <li field="f_zc_text10" title="批号" edit="text"></li>
+		    <li field="fbillno" title="单据编号" edit="text"></li>
+		    <li field="fplantype" title="计划类型" edit="select" templet="#selectType"></li>
+		    <li field="fseqnumber" title="序列号" edit="text"></li>
+		    <li field="fopernumber" title="工序号" edit="text"></li>
+		    <li field="foperqty" title="工序数量" edit="text"></li>
+		    <li field="fqualifiedqty" title="合格数量" edit="text" ></li>
+		    <li field="funqualifiedqty" title="废品数量" edit="text"></li>
+		    <li field="bmmfname" title="加工车间" edit="text"></li>
+		    <li field="zyfname" title="作业" edit="text"></li>
+		    <li field="foperstatus" title="状态" edit="select" templet="#selectFoperstatus"></li>
+		    <li field="fplanstarttime" title="计划开始时间" edit="date" ></li>
+		    <li field="fplanfinishtime" title="计划结束时间" edit="date"></li>
+		    <li field="gysfname" title="供应商" edit="text"></li>
+		    <li field="foutsrcprice" title="委外单价" edit="text"></li>
+		    <li field="fqualifiedbaseqty" title="基本单位合格数量" edit="text"></li>
+		    <li field="frealprocessfinishtime" title="实际加工完成时间" edit="date" ></li>
+		    <li field="bcfname" title="班次" edit="text"></li>
+		    <li field="bzfname" title="班组、操作工" edit="text"></li>
+		    <li field="fisstoreinpoint" title="入库点" edit="select"  templet="#selectZyfname"></li>
+		    <li field="foutsrctaxprice" title="委外含税单价" edit="text"></li>
+		    <li field="f_zc_text3" title="状态" edit="select" templet="#selectText3"></li>
+		</ul>
+		<script type="text/html" id="selectSex">
+			<select>
+				<option value=""></option>
+				<option value="1">男</option>
+				<option value="0">女</option>
+			</select>
+		</script>
+
+		<script type="text/javascript">
+			var divid = 0;
+			var field = 0;
+			var con = "conditionField";
+			var layid;
+			var man8="";
+			var man9="";
+			var man10="";
+			var man11="";
+			var man12="";
+			var man13="";
+			var man14="";
+			var man15="";
+			
+			var indd=0
+			var dynamicCondition;
+			layui.config({
+				base: '../../../layui_exts/' //设定扩展的Layui模块的所在目录，一般用于外部模块扩展
+			}).extend({
+				dynamicCondition: 'dynamicCondition/dynamicCondition'
+			}).use(['table', 'form', 'dynamicCondition'], function() {
+				var $ = layui.$,
+					table = layui.table,
+					form = layui.table;
+				dynamicCondition = layui.dynamicCondition;
+				var dataFields = [{
+					field: "id",
+					title: "id",
+					edit: "text",
+					layVerify: "number"
+				}, {
+					field: "name",
+					title: "姓名",
+					edit: "text"
+				}, {
+					field: "sex",
+					title: "性别",
+					edit: "select",
+					templet: "#selectSex"
+				}, {
+					field: "birthday",
+					title: "出生日期",
+					edit: "date"
+				}, {
+					field: "phone",
+					title: "手机号码",
+					edit: "text",
+					layVerify: "phone"
+				}, {
+					field: "email",
+					title: "邮箱",
+					layVerify: "email"
+				}];
+				//初始化动态条件查询实例
+				var dcInstance = dynamicCondition.create({
+					fields: dataFields //通过json对象传入
+						//,tableId:"listTable"  //静态页面不好演示table数据表格更新
+						,
+					type: "simple" //type:"simple"/"complex"
+						,
+					conditionTextId: "#msg",
+					extendBtns: function(btnDivJq, instance) { //扩展添加按钮
+						btnDivJq.append($('<a class="layui-btn " onclick="qh()">' +
+							(instance.config.displayModel == "unpopup" ? "弹窗" : "非弹窗") +
+							'模式</a>'));
+						btnDivJq.append($('<a class="layui-btn " href="http://xn--pzsz6a02k.xn--6qq986b3xl:9090/xpl/demo/dynamicCondition/index2">后台查询页面</a>'));
+					},
+					popupBtnsWidth: 350,
+					popupShowQueryBtn: true,
+					unpopupBtnswidth: 410,
+					unpopupShowAddBtn: true,
+					queryCallBack: function(requestData) {
+						$("#result1").html(JSON.stringify(requestData));
+					}
+				});
+				//dcInstance.setCondition([["name",null,"张三"]]);
+				dcInstance.setCondition([
+					["sex", null, "1"]
+				]);
+				dcInstance.setDisplayModel('unpopup');
+				/**简单查询*/
+				$("#simpleBtn").on("click", function() {
+					dcInstance.open();
+				})
+
+				var complexDc = dynamicCondition.create({
+					elem: "#dcDemo" //通过容器选择器传入，也可以$("#dcDemo"),或者document.getElementById("dcDemo")
+						//,tableId:"listTable" //静态页面不好演示table数据表格更新
+						,
+					type: "complex" //type:"simple"/"complex"
+						,
+					conditionTextId: "#msg2",
+					requestDataType: 'json'
+						//当有多个动态条件查询实例时，定义instanceName属性可以通过dynamicCondition.getInstance(instanceName)获取对应的实例
+						,
+					instanceName: "complexInstance",
+					extendBtns: function(btnDivJq, instance) { //扩展添加按钮
+						btnDivJq.append($('<a class="layui-btn " onclick="qh(\'complexInstance\')">' +
+							(instance.config.displayModel == "unpopup" ? "弹窗" : "非弹窗") +
+							'模式</a>'));
+						//btnDivJq.append($('<a class="layui-btn " href="http://xn--pzsz6a02k.xn--6qq986b3xl:9090/xpl/demo/dynamicCondition">后台查询页面</a>'));
+					
+					},
+					popupBtnsWidth: 350,
+					popupShowQueryBtn: true,
+					unpopupBtnswidth: 410,
+					unpopupShowAddBtn: true,
+					queryCallBack: function(requestData) {
+						$("#result2").html(JSON.stringify(requestData));
+					}
+				});
+				complexDc.setCondition([
+					["bmfname", "equal", "生产车间"]
+				]);
+					//alert($(".layui-laypage-limits conditionField").val(););
+					 
+				//$("#result2").html(JSON.stringify(complexDc.buildRequestData()));
+				/**复杂查询*/
+				$("#complexBtn").on("click", function() {
+					dynamicCondition.getInstance("complexInstance").open();
+					
+				})
+
+			});
+			
+			function qh(instanceName) {
+				var instance = dynamicCondition.getInstance(instanceName);
+				if("popup" == instance.config.displayModel) {
+					instance.setDisplayModel("unpopup");
+				} else {
+					instance.setDisplayModel("popup");
+				}
+			}
+			
+		</script>
+		
+		<script type="text/javascript">
+			    var fn2 = function (elem) {
+			    alert('这是选择2的值：' + elem.value);
+			    //$("#conditionField1").next().find("dl dd[lay-value='name']").hide();
+			    //console.log(document.getElementById().children[0]);
+			    };
+				
+//			    layui.use('table', function () {
+//			        var $ = layui.jquery,
+//			            table = layui.table,
+//			            form = layui.form;
+//			
+//			        // 让绑定在select的change事件触发
+//			        form.on('select', function (data) {
+//			            $(data.elem).trigger('change', data.elem);
+//			        })
+//				}); 	
+	</script>
+	</body>
+
+</html>

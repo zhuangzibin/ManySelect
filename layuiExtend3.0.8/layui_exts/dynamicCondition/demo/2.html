@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>layui</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="../../../layui/css/layui.css" media="all">
+		<script src="../../../layui/layui.js"></script>
+	</head>
+
+		<body>
+			<!--select模板-->
+			<script id="optionList" type="text/html">
+				<option value="">请选择</option>
+				{{# layui.each(d.list, function(index, item){ }}
+				<option value="{{item.id}}">{{item.name}}</option>
+				{{# }); }}
+			</script>
+			<form action="" method="post" lay-filter="formDemo" class="layui-form">
+				<select name="" id="select1" lay-filter="select1">
+					<option value="请选择"></option>
+				</select>
+				<select name="" id="select2" lay-filter="select2">
+					<option value="请选择"></option>
+				</select>
+
+			</form>
+			<script type="text/javascript" src="layui/layui.js"></script>
+			<script type="text/javascript">
+				layui.use(['laytpl', 'table', 'element', 'jquery', 'layer'], function() {
+					var element = layui.element;
+					var laytpl = layui.laytpl;
+					var $ = layui.jquery;
+					var layer = layui.layer;
+					var form = layui.form;
+
+					var allData = [{
+						'name': 'Join',
+						'id': 1
+					}, {
+						'name': 'Tom',
+						'id': 2
+					}, {
+						'name': 'Jan',
+						'id': 3
+					}, {
+						'name': 'Mary',
+						'id': 4
+					}] //select数据
+
+					/*初始渲染*/
+					var data = { //数据
+						"list": allData
+					}
+					var getTpl = optionList.innerHTML, //optionList:模板id
+						view = document.getElementById('select1'),
+						view2 = document.getElementById('select2');
+					laytpl(getTpl).render(data, function(html) {
+						view.innerHTML = html;
+						view2.innerHTML = html;
+					});
+					form.render('select');
+
+					var control = true; //数据是否去重过
+					/*select1 change*/
+					form.on('select(select1)', function(data) {
+						if(control) {
+							var val = data.value;
+							var index = allData.findIndex(item => item.id == val);
+							var newData = allData.slice(); //数组复制
+							newData.splice(index, 1); //去掉选中数据
+
+							/* 重新渲染 */
+							var data = { //数据
+								"list": newData
+							}
+							var getTpl = optionList.innerHTML, //optionList:模板id
+								view = document.getElementById('select2');
+							laytpl(getTpl).render(data, function(html) {
+								view.innerHTML = html;
+							});
+							form.render('select');
+							control = false;
+						}
+					});
+
+					/*select2 change*/
+					form.on('select(select2)', function(data) {
+						if(control) {
+							var val = data.value;
+							var index = allData.findIndex(item => item.id == val);
+							var newData = allData.slice(); //数组复制
+							newData.splice(index, 1); //去掉选中数据
+
+							/* 重新渲染 */
+							var data = { //数据
+								"list": newData
+							}
+							var getTpl = optionList.innerHTML, //optionList:模板id
+								view = document.getElementById('select1');
+							laytpl(getTpl).render(data, function(html) {
+								view.innerHTML = html;
+							});
+							form.render('select');
+							control = false;
+						}
+					});
+				});
+			</script>
+		</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>动态条件插件demo</title>
+		<link href="../../../layui/test/layui.css" media="all" rel="stylesheet">
+		<script src="../../../layui/test/layui.js"></script>
+	</head>
+
+	<body>
+		<div class="layui-input-inline layui-form">
+			<select lay-filter="selectFilter1" id="selectFilter1">
+				<option value="">请选择</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+			</select>
+		</div>
+		<div class="layui-input-inline layui-form">
+			<select lay-filter="selectFilter2" id="selectFilter2">
+				<option value="">请选择</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+			</select>
+		</div>
+		<div class="layui-input-inline layui-form">
+			<select lay-filter="selectFilter3" id="selectFilter3">
+				<option value="">请选择</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+			</select>
+		</div>
+		<script type="text/javascript">
+			layui.use(['form', 'jquery', 'layer'], function() {
+				var form = layui.form,
+					$ = layui.jquery,
+					layer = layui.layer;
+					
+				form.on('select(selectFilter1)', function(data) {
+					
+					changeOption1("selectFilter2", "selectFilter1", "selectFilter3");
+					changeOption1("selectFilter3", "selectFilter1", "selectFilter2");
+				});
+				form.on('select(selectFilter2)', function(data) {
+					changeOption1("selectFilter1", "selectFilter2", "selectFilter3");
+					changeOption1("selectFilter3", "selectFilter1", "selectFilter2");
+				});
+				form.on('select(selectFilter3)', function(data) {
+					changeOption1("selectFilter1", "selectFilter2", "selectFilter3");
+					changeOption1("selectFilter2", "selectFilter1", "selectFilter3");
+				});
+
+				function changeOption1(selectId, unselectIdA, unselectIdB) {
+					$("#" + selectId).next().find("dl dd").show();
+					//$("#selectFilter1").next().find("dl dd[lay-value='1']").hide();
+					$("#" + selectId).next().find("dl dd[lay-value='" + $("#" + unselectIdA).val() + "']").hide();
+					$("#" + selectId).next().find("dl dd[lay-value='" + $("#" + unselectIdB).val() + "']").hide();
+				}
+			});
+		</script>
+	</body>
+
+</html>
