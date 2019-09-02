@@ -418,7 +418,6 @@ layui.extend({
 				conditionObj.conditionFieldVal = conditionRowJq.find("select[name='conditionField']").val();
 				conditionObj.conditionOptionVal = conditionRowJq.find("select[name='conditionOption']").val();
 				var item = instance.getObjByField(conditionObj.conditionFieldVal);
-				//sconsole.log(item)
 				var curEditor = dynamicCondition.editor[item.edit];
 				if(curEditor) {
 					var conditionRowDOM = conditionRowJq[0];
@@ -680,7 +679,6 @@ layui.extend({
 				layid = con+field;
 				console.log(layid)
 				var rowJq = instance.addRow();
-				//console.log("12")
 				instance.updateConditionValue(rowJq);
 				form.render(null, 'conditionDiv' + instance.conditionContainerId);
 			});

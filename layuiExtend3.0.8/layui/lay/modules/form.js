@@ -16,17 +16,25 @@ layui.define("layer", function(e) {
 									//changeOption1("conditionField1");
 									//man = data.value
 									//arr.push(data.value)
-									console.log($("#12 option:selected").val())
-									man8 = $("#8 option:selected").val();
-									man9 = $("#9 option:selected").val();
-									man10 = $("#10 option:selected").val();
-									man11 = $("#11 option:selected").val();
-									man12 = $("#12 option:selected").val();
-									man13 = $("#13 option:selected").val();
-									man14 = $("#14 option:selected").val();
-									man15 = $("#15 option:selected").val();
-									man16 = $("#16 option:selected").val();
-									man17 = $("#17 option:selected").val();
+									//console.log($("#12 option:selected").val())
+									for(var ii=dividid;ii<500;ii++){
+									man[ii]=$(`#${ii} option:selected`).val()
+									//console.log(man[ii]);
+									}
+									
+									//console.log($('"#'+sbs+''+" "+'option:selected"').val())
+//									man8 = $("#8 option:selected").val();
+//									man9 = $("#9 option:selected").val();
+//									man10 = $("#10 option:selected").val();
+//									man11 = $("#11 option:selected").val();
+//									man12 = $("#12 option:selected").val();
+//									man13 = $("#13 option:selected").val();
+//									man14 = $("#14 option:selected").val();
+//									man15 = $("#15 option:selected").val();
+//									man16 = $("#16 option:selected").val();
+//									man17 = $("#17 option:selected").val();
+									//for(var dividid=7;dividid<50;dividid++)
+									//man[dividid]=$("#"+dividid+' ' "option:selected").val();
 									form.render();			
 			        })
 			        
@@ -201,12 +209,15 @@ layui.define("layer", function(e) {
 							m = i(['<div class="' + (h ? "" : "layui-unselect ") + a, (u ? " layui-select-disabled" : "") + '">', '<div class="' + n + '">', '<input type="text" placeholder="' + p + '" ' + ('value="' + (d ? f.html() : "") + '"') + (h ? "" : " readonly") + ' class="layui-input' + (h ? "" : " layui-unselect") + (u ? " " + c : "") + '">', '<i class="layui-edge"></i></div>', '<dl class="layui-anim layui-anim-upbit' + (r.find("optgroup")[0] ? " layui-select-group" : "") + '">', function(e) {
 								var i = [];
 								return layui.each(e, function(e, a) {
-									if(a.value != man8){
-										if(a.value != man9){
-											if(a.value != man10){
-												if(a.value != man11){
-													if(a.value != man12){
-									0 !== e || a.value ? "optgroup" === a.tagName.toLowerCase() ? i.push("<dt>" + a.label + "</dt>") : i.push('<dd lay-value="' + a.value + '" class="' + (d === a.value ? s : "") + (a.disabled ? " " + c : "") + '">' + a.innerHTML + "</dd>") : i.push('<dd lay-value="" class="layui-select-tips">' + (a.innerHTML || t) + "</dd>")}}}}}
+									var item = a.value;
+									var num = man.find(e=>e==item) || 0							
+									if(num == 0){
+//									if(a.value != man8){
+//										if(a.value != man9){
+//											if(a.value != man10){
+//												if(a.value != man11){
+//													if(a.value != man12){
+									0 !== e || a.value ? "optgroup" === a.tagName.toLowerCase() ? i.push("<dt>" + a.label + "</dt>") : i.push('<dd lay-value="' + a.value + '" class="' + (d === a.value ? s : "") + (a.disabled ? " " + c : "") + '">' + a.innerHTML + "</dd>") : i.push('<dd lay-value="" class="layui-select-tips">' + (a.innerHTML || t) + "</dd>");}
 								}), 0 === i.length && i.push('<dd lay-value="" class="' + c + '">没有选项</dd>'), i.join("")
 							}(r.find("*")) + "</dl>", "</div>"].join(""));
 						o[0] && o.remove(), r.after(m), y.call(this, m, u, h)
